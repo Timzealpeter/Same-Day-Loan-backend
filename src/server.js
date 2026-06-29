@@ -1,30 +1,22 @@
-import express from "express";
 import dotenv from "dotenv";
-import cors from "cors";
 
-import connectDb from "./config/db.js";
-import detailsRoutes from "./routes/detailsRoutes.js";
-const app = express();
+import app from "./app.js";
+import connectDb from "../src/config/db.js";
+
 dotenv.config();
+
 const PORT = process.env.PORT || 5000;
 
-// Enable CORS for specific origin
-app.use(
-  cors({
-    origin: "http://localhost:5173", // Your frontend URL
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  }),
-);
+async function startServer() {
+  try {
+    await connectDb();
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error);
+  }
+}
 
-app.use("/api/details", detailsRoutes);
-
-connectDb().then(() => {
-  app.listen(PORT, () => {
-    console.log(`APP is listening on ${PORT}`);
-  });
-});
+startServer();
