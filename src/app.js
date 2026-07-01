@@ -1,20 +1,17 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-
 import detailsRoutes from "./routes/detailsRoutes.js";
 
 dotenv.config();
 
 const app = express();
 
-// Enable CORS
+// FIX: Remove the trailing slash from origin
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: "http://localhost:5173", // <- NO trailing slash!
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
 
